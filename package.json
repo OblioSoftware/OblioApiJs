@@ -1,0 +1,25 @@
+{
+  "name": "@obliosoftware/oblioapi",
+  "type": "module",
+  "version": "1.0.0",
+  "description": "Oblio.eu API implementation for NodeJS",
+  "main": "main.js",
+  "scripts": {
+    "dev": "node dist/main.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "Oblio",
+    "Api",
+    "Invoicing"
+  ],
+  "author": "Oblio Software",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^1.4.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.2.5",
+    "dotenv": "^16.0.3"
+  }
+}
