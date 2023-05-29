@@ -1,4 +1,10 @@
 import axios, { AxiosInstance } from 'axios';
+import * as fs from 'node:fs';
+import { dirname } from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 class OblioApi {
     _cif: string                 = '';
@@ -48,11 +54,63 @@ class OblioApi {
         return response.data;
     }
 
-    // public function get($type, $seriesName, $number): array
-    // public function cancel($type, $seriesName, $number, $cancel = true): array
-    // public function delete($type, $seriesName, $number): array
-    // public function collect($seriesName, $number, $collect): array
-    // public function nomenclature($type = null, $name = '', array $filters = []): array
+    async get(type: string, seriesName: string, number: number): Promise<Map> {
+        this._checkType(type);
+        let cif = this.getCif();
+        let request = await this.buildRequest();
+        let response;
+
+        try {
+            response = await request.get(`/api/docs/${type}?cif=${cif}&seriesName=${seriesName}&number=${number}`);
+        } catch (err) {
+            response = err.response;
+        }
+        this._checkErrorResponse(response);
+        return response.data;
+    }
+
+    async cancel(type: string, seriesName: string, number: number, cancel = true): Promise<Map> {
+        this._checkType(type);
+        let cif = this.getCif();
+        let request = await this.buildRequest();
+        let response;
+
+        try {
+            response = await request.put(`/api/docs/${type}/${cancel ? 'cancel' : 'restore'}`, {
+                cif: cif,
+                seriesName: seriesName,
+                number: number
+            });
+        } catch (err) {
+            response = err.response;
+        }
+        this._checkErrorResponse(response);
+        return response.data;
+    }
+
+    async delete(type: string, seriesName: string, number: number): Promise<Map> {
+        this._checkType(type);
+        let cif = this.getCif();
+        let request = await this.buildRequest();
+        let response;
+
+        try {
+            response = await request.delete(`/api/docs/${type}`, {
+                data: {
+                    cif: cif,
+                    seriesName: seriesName,
+                    number: number
+                }
+            });
+        } catch (err) {
+            response = err.response;
+        }
+        this._checkErrorResponse(response);
+        return response.data;
+    }
+
+    // async collect(type: string, seriesName: string, number: number): Promise<Map>
+    // async nomenclature(type: string = null, name: string = '', filters: Map = {}): Promise<Map>
     
     setCif(cif: string): void {
         this._cif = cif;
@@ -77,7 +135,7 @@ class OblioApi {
     
     async getAccessToken(): Promise<AccessToken> {
         let accessToken: AccessToken = this._accessTokenHandler.get();
-        if (accessToken === undefined) {
+        if (accessToken === null) {
             accessToken = await this._generateAccessToken();
             this._accessTokenHandler.set(accessToken);
         }
@@ -147,26 +205,17 @@ export interface AccessTokenInterface {
     access_token: string;
 }
 
-export class AccessToken implements AccessTokenInterface {
+export class AccessToken {
     request_time: number;
     expires_in: number;
     token_type: string;
     access_token: string;
 
-    constructor(data: AccessTokenInterface) {
+    constructor(data: Map) {
         this.request_time = data.request_time;
         this.expires_in   = data.expires_in;
         this.token_type   = data.token_type;
         this.access_token = data.access_token;
-    }
-
-    toMap(): AccessTokenInterface {
-        return {
-            'request_time': this.request_time,
-            'expires_in': this.expires_in,
-            'token_type': this.token_type,
-            'access_token': this.access_token
-        }
     }
 }
 
@@ -176,13 +225,30 @@ export interface AccessTokenHandlerInterface {
 } 
 
 export class AccessTokenHandlerFileStorage implements AccessTokenHandlerInterface {
-    accessToken: AccessToken;
+    _accessTokenFilePath: string;
+
+    constructor(accessTokenFilePath: string = null) {
+        this._accessTokenFilePath = accessTokenFilePath === null
+            ? __dirname + '/../storage/.access_token'
+            : accessTokenFilePath;
+    }
 
     get(): AccessToken {
-        return this.accessToken;
+        if (fs.existsSync(this._accessTokenFilePath)) {
+            let accessTokenFileContent = JSON.parse(fs.readFileSync(this._accessTokenFilePath, 'utf-8'));
+            let accessToken = new AccessToken(accessTokenFileContent);
+            if (accessToken.request_time + accessToken.expires_in > (Date.now() * 1000)) {
+                return accessToken;
+            }
+        }
+        return null;
     }
 
     set(accessToken: AccessToken): void {
-        this.accessToken = accessToken;
+        fs.mkdir(dirname(this._accessTokenFilePath), {recursive: true}, (err) => {
+            if (err) return;
+
+            fs.writeFile(this._accessTokenFilePath, JSON.stringify(accessToken), (err) => {});
+        });
     }
 }

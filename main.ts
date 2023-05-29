@@ -25,7 +25,7 @@ const data = {
     'dueDate'           : '',
     'deliveryDate'      : '',
     'collectDate'       : '',
-    'seriesName'        : '',
+    'seriesName'        : process.env.SERIES_NAME,
     'collect'           : {},
     'referenceDocument' : {},
     'language'          : 'RO',
@@ -60,11 +60,18 @@ const data = {
     'useStock'          : 0,
 };
 
+
+
+
 try {
     const api = new OblioApi(process.env.API_EMAIL, process.env.API_SECRET);
-    api.createInvoice(data)
+    api.setCif(process.env.CIF);
+    api.cancel('invoice', 'FCT', 300)
         .then((response) => console.log(response))
         .catch((error) => console.log(error));
+    /*api.createInvoice(data)
+        .then((response) => console.log(response))
+        .catch((error) => console.log(error));//*/
 } catch (e) {
     console.log(e);
 }
