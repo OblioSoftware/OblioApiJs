@@ -61,7 +61,13 @@ class OblioApi {
         let response;
 
         try {
-            response = await request.get(`/api/docs/${type}?cif=${cif}&seriesName=${seriesName}&number=${number}`);
+            response = await request.get(`/api/docs/${type}`, {
+                params: {
+                    cif: cif,
+                    seriesName: seriesName,
+                    number: number
+                }
+            });
         } catch (err) {
             response = err.response;
         }
@@ -109,8 +115,56 @@ class OblioApi {
         return response.data;
     }
 
-    // async collect(type: string, seriesName: string, number: number): Promise<Map>
-    // async nomenclature(type: string = null, name: string = '', filters: Map = {}): Promise<Map>
+    async collect(seriesName: string, number: number, collect: Map): Promise<Map> {
+        let cif = this.getCif();
+        let request = await this.buildRequest();
+        let response;
+
+        try {
+            response = await request.put('/api/docs/invoice/collect', {
+                cif: cif,
+                seriesName: seriesName,
+                number: number,
+                collect: collect
+            });
+        } catch (err) {
+            response = err.response;
+        }
+        this._checkErrorResponse(response);
+        return response.data;
+    }
+
+    async nomenclature(type: string, name: string = '', filters: Map = {}): Promise<Map> {
+        let cif = '';
+        switch (type) {
+            case 'companies':
+                break;
+            case 'vat_rates':
+            case 'products':
+            case 'clients':
+            case 'series':
+            case 'languages':
+            case 'management':
+                cif = this.getCif();
+                break;
+            default:
+                throw new OblioApiException('Type not implemented');
+        }
+        let request = await this.buildRequest();
+        let response;
+
+        try {
+            filters.cif = cif;
+            filters.name = name;
+            response = await request.get(`/api/nomenclature/${type}`, {
+                params: filters
+            });
+        } catch (err) {
+            response = err.response;
+        }
+        this._checkErrorResponse(response);
+        return response.data;
+    }
     
     setCif(cif: string): void {
         this._cif = cif;

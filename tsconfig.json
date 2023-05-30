@@ -3,7 +3,7 @@
       "target": "ES6",
       "module": "NodeNext",
       "noImplicitAny": true,
-      "removeComments": true,
+      "removeComments": false,
       "preserveConstEnums": true,
       "outDir": "dist"
     },

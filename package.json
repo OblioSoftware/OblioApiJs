@@ -3,10 +3,13 @@
   "type": "module",
   "version": "1.0.0",
   "description": "Oblio.eu API implementation for NodeJS",
-  "main": "main.js",
+  "directories": {
+    "lib": "./src",
+    "test": "./test"
+  },
   "scripts": {
     "dev": "node dist/main.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha"
   },
   "keywords": [
     "Oblio",
@@ -20,6 +23,7 @@
   },
   "devDependencies": {
     "@types/node": "^20.2.5",
-    "dotenv": "^16.0.3"
+    "dotenv": "^16.0.3",
+    "mocha": "^10.2.0"
   }
 }

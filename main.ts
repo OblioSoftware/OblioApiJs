@@ -60,13 +60,10 @@ const data = {
     'useStock'          : 0,
 };
 
-
-
-
 try {
     const api = new OblioApi(process.env.API_EMAIL, process.env.API_SECRET);
     api.setCif(process.env.CIF);
-    api.cancel('invoice', 'FCT', 300)
+    api.get('invoice', process.env.SERIES_NAME, 300)
         .then((response) => console.log(response))
         .catch((error) => console.log(error));
     /*api.createInvoice(data)
