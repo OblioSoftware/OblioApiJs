@@ -1,4 +1,7 @@
 # OblioApiJs
+
+ ![test workflow](https://github.com/OblioSoftware/OblioApiJs/actions/workflows/node.js.yml/badge.svg)
+
  Oblio.eu API implementation for NodeJS
 
 ## Install
@@ -69,12 +72,8 @@ const data = {
     'useStock'          : 0,
 };
 
-try {
-    const api = new OblioApi(process.env.API_EMAIL, process.env.API_SECRET);
-    api.createInvoice(data)
-        .then((response) => console.log(response))
-        .catch((error) => console.log(error));
-} catch (e) {
-    console.log(e);
-}
+const api = new OblioApi(process.env.API_EMAIL, process.env.API_SECRET);
+api.createInvoice(data)
+    .then((response) => console.log(response))
+    .catch((error) => console.log(error));
 ```
