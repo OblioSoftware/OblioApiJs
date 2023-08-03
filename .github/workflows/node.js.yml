@@ -10,7 +10,6 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
-    environment: tests
 
     strategy:
       matrix:
@@ -28,10 +27,10 @@ jobs:
     - name: create env file
       run: |
         touch .env
-        echo CIF="$CIF" >> .env
-        echo API_EMAIL="$API_EMAIL" >> .env
-        echo API_SECRET="$API_SECRET" >> .env
-        echo SERIES_NAME="$SERIES_NAME" >> .env
+        echo CIF="${{ secrets.CIF }}" >> .env
+        echo API_EMAIL="${{ secrets.API_EMAIL }}" >> .env
+        echo API_SECRET="${{ secrets.API_SECRET }}" >> .env
+        echo SERIES_NAME="${{ secrets.SERIES_NAME }}" >> .env
 
     - run: npm i
     - run: npm run build
