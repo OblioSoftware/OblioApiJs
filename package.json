@@ -1,10 +1,15 @@
 {
   "name": "@obliosoftware/oblioapi",
   "type": "module",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Oblio.eu API implementation for NodeJS",
   "main": "lib/Api.js",
   "types": "lib/Api.d.ts",
+  "homepage": "https://www.oblio.eu/api",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/OblioSoftware/OblioApiJs"
+  },
   "directories": {
     "lib": "./src",
     "test": "./test"
