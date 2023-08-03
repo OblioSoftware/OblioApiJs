@@ -24,6 +24,15 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
+
+    - name: create env file
+      run: |
+        touch .env
+        echo CIF="$CIF" >> .env
+        echo API_EMAIL="$API_EMAIL" >> .env
+        echo API_SECRET="$API_SECRET" >> .env
+        echo SERIES_NAME="$SERIES_NAME" >> .env
+
     - run: npm i
     - run: npm run build
     - run: npm test
