@@ -1,14 +1,17 @@
 {
   "name": "@obliosoftware/oblioapi",
   "type": "module",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "Oblio.eu API implementation for NodeJS",
+  "main": "lib/Api.js",
+  "types": "lib/Api.d.ts",
   "directories": {
     "lib": "./src",
     "test": "./test"
   },
   "scripts": {
-    "dev": "node dist/main.js",
+    "dev": "node lib/main.js",
+    "build": "npx tsc",
     "test": "mocha"
   },
   "keywords": [

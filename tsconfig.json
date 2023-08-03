@@ -5,13 +5,15 @@
       "noImplicitAny": true,
       "removeComments": false,
       "preserveConstEnums": true,
-      "outDir": "dist"
+      "declaration": true,
+      "outDir": "lib"
     },
     "watchOptions": {
         "watchFile": "useFsEvents",
         "watchDirectory": "useFsEvents",
         "fallbackPolling": "dynamicPriority",
         "synchronousWatchDirectory": true,
-        "excludeDirectories": ["**/node_modules", "_build"]
-    }
+        "excludeDirectories": ["**/node_modules", "lib"]
+    },
+    "include": ["src/**/*"]
   }
