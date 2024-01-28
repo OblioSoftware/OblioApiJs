@@ -1,11 +1,17 @@
 {
   "name": "@obliosoftware/oblioapi",
-  "type": "module",
-  "version": "2.0.1",
+  "version": "2.0.3",
   "description": "Oblio.eu API implementation for NodeJS",
   "main": "lib/es5/Api.js",
   "module": "lib/es6/Api.js",
   "types": "lib/es6/Api.d.ts",
+  "exports": {
+    ".": {
+      "require": "./lib/es5/Api.js",
+      "import": "./lib/es6/Api.js",
+      "default": "./lib/es6/Api.js"
+    }
+  },
   "homepage": "https://www.oblio.eu/api",
   "repository": {
     "type": "git",

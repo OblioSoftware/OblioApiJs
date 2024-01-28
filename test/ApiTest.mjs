@@ -66,7 +66,7 @@ describe('OblioApi', function () {
             'workStation'       : 'Sediu',
             'useStock'          : 0,
         };
-        const api = new OblioApi(process.env.API_EMAIL, process.env.API_SECRET);
+        const api = new OblioApi.default(process.env.API_EMAIL, process.env.API_SECRET);
         api.createInvoice(data)
             .then((response) => {
                 invoice = response.data;
@@ -76,7 +76,7 @@ describe('OblioApi', function () {
             .catch((error) => console.log(error));
     });
     it('testGetInvoice', function (done) {
-        const api = new OblioApi(process.env.API_EMAIL, process.env.API_SECRET);
+        const api = new OblioApi.default(process.env.API_EMAIL, process.env.API_SECRET);
         api.setCif(process.env.CIF);
         api.get('invoice', invoice.seriesName, invoice.number)
             .then((response) => {
@@ -86,7 +86,7 @@ describe('OblioApi', function () {
             .catch((error) => console.log(error));
     })
     it('testCancelInvoice', function (done) {
-        const api = new OblioApi(process.env.API_EMAIL, process.env.API_SECRET);
+        const api = new OblioApi.default(process.env.API_EMAIL, process.env.API_SECRET);
         api.setCif(process.env.CIF);
         api.cancel('invoice', invoice.seriesName, invoice.number, true)
             .then((response) => {
@@ -96,7 +96,7 @@ describe('OblioApi', function () {
             .catch((error) => console.log(error));
     })
     it('testRestoreInvoice', function (done) {
-        const api = new OblioApi(process.env.API_EMAIL, process.env.API_SECRET);
+        const api = new OblioApi.default(process.env.API_EMAIL, process.env.API_SECRET);
         api.setCif(process.env.CIF);
         api.cancel('invoice', invoice.seriesName, invoice.number, false)
             .then((response) => {
@@ -106,7 +106,7 @@ describe('OblioApi', function () {
             .catch((error) => console.log(error));
     })
     it('testDeleteInvoice', function (done) {
-        const api = new OblioApi(process.env.API_EMAIL, process.env.API_SECRET);
+        const api = new OblioApi.default(process.env.API_EMAIL, process.env.API_SECRET);
         api.setCif(process.env.CIF);
         api.delete('invoice', invoice.seriesName, invoice.number)
             .then((response) => {

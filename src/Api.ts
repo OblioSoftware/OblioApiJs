@@ -2,7 +2,9 @@ import axios, { AxiosInstance } from 'axios';
 import * as fs from 'node:fs';
 import { dirname } from 'path';
 
-const __dirname = process.cwd();
+if (typeof __dirname === 'undefined') {
+    var __dirname = process.cwd();
+}
 
 class OblioApi {
     _cif: string                 = '';
