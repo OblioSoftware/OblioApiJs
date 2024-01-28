@@ -1,13 +1,14 @@
 {
   "name": "@obliosoftware/oblioapi",
-  "version": "2.0.3",
+  "type": "module",
+  "version": "2.0.5",
   "description": "Oblio.eu API implementation for NodeJS",
-  "main": "lib/es5/Api.js",
+  "main": "lib/es5/Api.cjs",
   "module": "lib/es6/Api.js",
   "types": "lib/es6/Api.d.ts",
   "exports": {
     ".": {
-      "require": "./lib/es5/Api.js",
+      "require": "./lib/es5/Api.cjs",
       "import": "./lib/es6/Api.js",
       "default": "./lib/es6/Api.js"
     }
@@ -23,7 +24,9 @@
   },
   "scripts": {
     "dev": "node lib/es6/Api.js",
-    "build": "npx tsc && npx tsc --build tsconfig.es5.json",
+    "clean": "npx rimraf lib",
+    "rename": "npx renamer --find .js --replace .cjs \"./lib/es5/*.js\"",
+    "build": "npm run clean && npx tsc && npx tsc --build tsconfig.es5.json && npm run rename",
     "test": "npx mocha --timeout 10000"
   },
   "keywords": [
@@ -40,6 +43,8 @@
     "@types/node": "^20.2.5",
     "dotenv": "^16.0.3",
     "mocha": "^10.2.0",
+    "renamer": "^4.0.0",
+    "rimraf": "^4.3.0",
     "typescript": "^5.1.6"
   }
 }
