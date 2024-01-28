@@ -7,7 +7,7 @@
 ## Install
 
 ```
-npm -i @obliosoftware/oblioapi
+npm i @obliosoftware/oblioapi
 ```
 
 ## Use

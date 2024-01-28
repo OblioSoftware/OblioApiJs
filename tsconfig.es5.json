@@ -1,12 +1,12 @@
 {
     "compilerOptions": {
-      "target": "ES6",
-      "module": "NodeNext",
+      "target": "ES5",
+      "module": "CommonJS",
       "noImplicitAny": true,
       "removeComments": false,
       "preserveConstEnums": true,
       "declaration": true,
-      "outDir": "lib/es6/"
+      "outDir": "lib/es5/"
     },
     "watchOptions": {
         "watchFile": "useFsEvents",

@@ -1,5 +1,5 @@
 import assert from 'assert'
-import OblioApi from '../lib/Api.js';
+import OblioApi from '../lib/es6/Api.js';
 import * as dotenv from 'dotenv';
 
 before(() => {

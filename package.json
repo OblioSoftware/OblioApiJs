@@ -1,10 +1,11 @@
 {
   "name": "@obliosoftware/oblioapi",
   "type": "module",
-  "version": "1.0.3",
+  "version": "2.0.1",
   "description": "Oblio.eu API implementation for NodeJS",
-  "main": "lib/Api.js",
-  "types": "lib/Api.d.ts",
+  "main": "lib/es5/Api.js",
+  "module": "lib/es6/Api.js",
+  "types": "lib/es6/Api.d.ts",
   "homepage": "https://www.oblio.eu/api",
   "repository": {
     "type": "git",
@@ -15,9 +16,9 @@
     "test": "./test"
   },
   "scripts": {
-    "dev": "node lib/main.js",
-    "build": "npx tsc",
-    "test": "mocha --timeout 10000"
+    "dev": "node lib/es6/Api.js",
+    "build": "npx tsc && npx tsc --build tsconfig.es5.json",
+    "test": "npx mocha --timeout 10000"
   },
   "keywords": [
     "Oblio",

@@ -1,10 +1,8 @@
 import axios, { AxiosInstance } from 'axios';
 import * as fs from 'node:fs';
 import { dirname } from 'path';
-import { fileURLToPath } from 'url';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+const __dirname = process.cwd();
 
 class OblioApi {
     _cif: string                 = '';
@@ -283,7 +281,7 @@ export class AccessTokenHandlerFileStorage implements AccessTokenHandlerInterfac
 
     constructor(accessTokenFilePath: string = null) {
         this._accessTokenFilePath = accessTokenFilePath === null
-            ? __dirname + '/../storage/.access_token'
+            ? __dirname + '/storage/.access_token'
             : accessTokenFilePath;
     }
 
