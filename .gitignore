@@ -126,3 +126,5 @@ storage
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+src/Api.cjs
+main.cjs

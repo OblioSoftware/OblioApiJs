@@ -1,5 +1,5 @@
 import axios, { AxiosInstance } from 'axios';
-import * as fs from 'node:fs';
+import * as fs from 'fs';
 import { dirname } from 'path';
 
 if (typeof __dirname === 'undefined') {
@@ -157,6 +157,23 @@ class OblioApi {
             filters.cif = cif;
             filters.name = name;
             response = await request.get(`/api/nomenclature/${type}`, {
+                params: filters
+            });
+        } catch (err) {
+            response = err.response;
+        }
+        this._checkErrorResponse(response);
+        return response.data;
+    }
+
+    async list(type: string, filters: Map = {}): Promise<Map> {
+        let request = await this.buildRequest();
+        let response;
+        try {
+            if (!('cif' in filters)) {
+                filters.cif = this.getCif();
+            }
+            response = await request.get(`/api/docs/${type}/list`, {
                 params: filters
             });
         } catch (err) {

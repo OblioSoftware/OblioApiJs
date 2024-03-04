@@ -61,12 +61,14 @@ const data = {
 };
 
 try {
-    const api = new OblioApi(process.env.API_EMAIL, process.env.API_SECRET);
-    api.setCif(process.env.CIF);
-    api.get('invoice', process.env.SERIES_NAME, 300)
-        .then((response) => console.log(response))
-        .catch((error) => console.log(error));
-    /*api.createInvoice(data)
+    const api = new OblioApi(process.env.API_EMAIL || '', process.env.API_SECRET || '');
+    api.setCif(process.env.CIF || '');
+    // api.get('invoice', process.env.SERIES_NAME || '', 300)
+    //     .then((response) => console.log(response))
+    //     .catch((error) => console.log(error));
+    api.list('invoice', {
+        
+    })
         .then((response) => console.log(response))
         .catch((error) => console.log(error));//*/
 } catch (e) {
