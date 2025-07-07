@@ -12,7 +12,7 @@ npm i @obliosoftware/oblioapi
 
 ## Use
 
-```
+```javascript
 import OblioApi from '@obliosoftware/oblioapi';
 
 const data = {
