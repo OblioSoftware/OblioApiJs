@@ -72,8 +72,16 @@ const data = {
     'useStock'          : 0,
 };
 
-const api = new OblioApi(process.env.API_EMAIL, process.env.API_SECRET);
-api.createInvoice(data)
-    .then((response) => console.log(response))
-    .catch((error) => console.log(error));
+async function main(argv) {
+    try {
+        const api = new OblioApi(process.env.API_EMAIL, process.env.API_SECRET);
+        let request = await api.createInvoice(data);
+        console.log(response)
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+main(process.argv);
+
 ```
