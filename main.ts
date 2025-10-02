@@ -60,17 +60,25 @@ const data = {
     'useStock'          : 0,
 };
 
-try {
+async function main(argv) {
     const api = new OblioApi(process.env.API_EMAIL || '', process.env.API_SECRET || '');
     api.setCif(process.env.CIF || '');
-    // api.get('invoice', process.env.SERIES_NAME || '', 300)
-    //     .then((response) => console.log(response))
-    //     .catch((error) => console.log(error));
-    api.list('invoice', {
-        
-    })
-        .then((response) => console.log(response))
-        .catch((error) => console.log(error));//*/
-} catch (e) {
-    console.log(e);
+
+    // create invoice
+    try {
+        let request = await api.createInvoice(data);
+        console.log(response);
+    } catch (error) {
+        console.log(error);
+    }
+
+    // list invoices
+    try {
+        let request = await api.list('invoice', {});
+        console.log(response);
+    } catch (error) {
+        console.log(error);
+    }
 }
+
+main(process.argv);
