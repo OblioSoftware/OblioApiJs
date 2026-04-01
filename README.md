@@ -4,6 +4,9 @@
 
  Oblio.eu API implementation for NodeJS
 
+> **Warning**
+> axios 1.14.1 is compromised, version obliosoftware/oblioapi version 3.0.0 does not use axios anymore 
+
 ## Install
 
 ```
