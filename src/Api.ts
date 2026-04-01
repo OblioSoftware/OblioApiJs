@@ -1,4 +1,3 @@
-import axios, { AxiosInstance } from 'axios';
 import * as fs from 'fs';
 import { dirname } from 'path';
 
@@ -191,15 +190,12 @@ class OblioApi {
         return this._cif;
     }
     
-    async buildRequest(): Promise<AxiosInstance> {
+    async buildRequest(): Promise<HttpClient> {
         let accessToken: AccessToken = await this.getAccessToken();
-        const request = axios.create({
-            baseURL: this._baseURL,
-            headers : {
-                'Accept'       : 'application/json',
-                'Content-Type' : 'application/json',
-                'Authorization':  accessToken.token_type + ' ' + accessToken.access_token,
-            },
+        const request = new HttpClient(this._baseURL, {
+            'Accept'       : 'application/json',
+            'Content-Type' : 'application/json',
+            'Authorization':  accessToken.token_type + ' ' + accessToken.access_token,
         });
         return request;
     }
@@ -217,14 +213,13 @@ class OblioApi {
         if (!this._email || !this._secret) {
             throw new OblioApiException('Email or secret are empty!');
         }
-        let response = await axios.request({
-            method: 'post',
-            url: `${this._baseURL}/api/authorize/token`,
-            data: {
+        let response = await fetch(`${this._baseURL}/api/authorize/token`, {
+            method: 'POST',
+            body: JSON.stringify({
                 'client_id'    : this._email,
                 'client_secret': this._secret,
                 'grant_type'   : 'client_credentials'
-            },
+            }),
             headers : {
                 'Accept'       : 'application/json',
                 'Content-Type' : 'application/json',
@@ -233,7 +228,7 @@ class OblioApi {
         if (response.status < 200 || response.status >= 300) {
             throw new OblioApiException(`Error authorize token! HTTP status: ${response.status}`, response.status);
         }
-        return new AccessToken(response.data);
+        return new AccessToken(await response.json());
     }
 
     _checkType(type: string): void {
@@ -321,5 +316,74 @@ export class AccessTokenHandlerFileStorage implements AccessTokenHandlerInterfac
 
             fs.writeFile(this._accessTokenFilePath, JSON.stringify(accessToken), (err) => {});
         });
+    }
+}
+
+class HttpResponse {
+    status: number = 0;
+    data: Map = {};
+}
+
+class HttpClient {
+    baseURL: string = '';
+    headers: Map = {};
+
+    constructor(baseURL: string, headers: Map) {
+        this.baseURL = baseURL;
+        this.headers = headers;
+    }
+
+    async _result(response: Response): Promise<HttpResponse> {
+        let result = new HttpResponse();
+        result.status = response.status;
+        result.data = await response.json();
+        return result;
+    }
+
+    async get(endpoint: string, data: Map): Promise<HttpResponse> {
+        let query = new URLSearchParams(('params' in data && data.params) || {});
+        let queryString = query.toString();
+        let response = await fetch(this.baseURL + endpoint + (queryString == '' ? '' : '?' + queryString), {
+            method: 'GET',
+            headers: this.headers
+        });
+        return this._result(response);
+    }
+
+    async post(endpoint: string, data: Map): Promise<HttpResponse> {
+        let response = await fetch(this.baseURL + endpoint, {
+            method: 'POST',
+            headers: this.headers,
+            body: JSON.stringify(data)
+        });
+        return this._result(response);
+    }
+
+    async put(endpoint: string, data: Map): Promise<HttpResponse> {
+        let response = await fetch(this.baseURL + endpoint, {
+            method: 'PUT',
+            headers: this.headers,
+            body: JSON.stringify(data)
+        });
+        return this._result(response);
+    }
+
+    async patch(endpoint: string, data: Map): Promise<HttpResponse> {
+        let response = await fetch(this.baseURL + endpoint, {
+            method: 'PATCH',
+            headers: this.headers,
+            body: JSON.stringify(data)
+        });
+        return this._result(response);
+    }
+
+    async delete(endpoint: string, data: Map): Promise<HttpResponse> {
+        let body = 'data' in data ? JSON.stringify(data.data) : '';
+        let response = await fetch(this.baseURL + endpoint, {
+            method: 'DELETE',
+            headers: this.headers,
+            body: body
+        });
+        return this._result(response);
     }
 }

@@ -1,7 +1,7 @@
 {
   "name": "@obliosoftware/oblioapi",
   "type": "module",
-  "version": "2.0.5",
+  "version": "3.0.0",
   "description": "Oblio.eu API implementation for NodeJS",
   "main": "lib/es5/Api.cjs",
   "module": "lib/es6/Api.js",
@@ -16,7 +16,7 @@
   "homepage": "https://www.oblio.eu/api",
   "repository": {
     "type": "git",
-    "url": "https://github.com/OblioSoftware/OblioApiJs"
+    "url": "git+https://github.com/OblioSoftware/OblioApiJs.git"
   },
   "directories": {
     "lib": "./src",
@@ -36,13 +36,10 @@
   ],
   "author": "Oblio Software",
   "license": "MIT",
-  "dependencies": {
-    "axios": "^1.4.0"
-  },
   "devDependencies": {
     "@types/node": "^20.2.5",
     "dotenv": "^16.0.3",
-    "mocha": "^10.2.0",
+    "mocha": "^11.7.5",
     "renamer": "^4.0.0",
     "rimraf": "^4.3.0",
     "typescript": "^5.1.6"

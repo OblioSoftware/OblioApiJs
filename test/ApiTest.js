@@ -69,6 +69,7 @@ describe('OblioApi', function () {
         const api = new OblioApi(process.env.API_EMAIL, process.env.API_SECRET);
         api.createInvoice(data)
             .then((response) => {
+                console.log({'response': response});
                 invoice = response.data;
                 assert.equal(response.status, 200);
                 done();
@@ -80,6 +81,7 @@ describe('OblioApi', function () {
         api.setCif(process.env.CIF);
         api.get('invoice', invoice.seriesName, invoice.number)
             .then((response) => {
+                console.log({'get invoice': response});
                 assert.equal(response.status, 200);
                 done();
             })
@@ -90,6 +92,7 @@ describe('OblioApi', function () {
         api.setCif(process.env.CIF);
         api.cancel('invoice', invoice.seriesName, invoice.number, true)
             .then((response) => {
+                console.log({'testCancelInvoice': response});
                 assert.equal(response.status, 200);
                 done();
             })
@@ -100,6 +103,7 @@ describe('OblioApi', function () {
         api.setCif(process.env.CIF);
         api.cancel('invoice', invoice.seriesName, invoice.number, false)
             .then((response) => {
+                console.log({'testRestoreInvoice': response});
                 assert.equal(response.status, 200);
                 done();
             })
@@ -110,6 +114,7 @@ describe('OblioApi', function () {
         api.setCif(process.env.CIF);
         api.delete('invoice', invoice.seriesName, invoice.number)
             .then((response) => {
+                console.log({'testDeleteInvoice': response});
                 assert.equal(response.status, 200);
                 done();
             })
