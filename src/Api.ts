@@ -303,7 +303,9 @@ export class AccessTokenHandlerFileStorage implements AccessTokenHandlerInterfac
         if (fs.existsSync(this._accessTokenFilePath)) {
             let accessTokenFileContent = JSON.parse(fs.readFileSync(this._accessTokenFilePath, 'utf-8'));
             let accessToken = new AccessToken(accessTokenFileContent);
-            if (accessToken.request_time + accessToken.expires_in > (Date.now() * 1000)) {
+            const expiresAt = Number(accessToken.request_time) + Number(accessToken.expires_in);
+            const nowSeconds = Math.floor(Date.now() / 1000);
+            if (expiresAt > nowSeconds) {
                 return accessToken;
             }
         }
