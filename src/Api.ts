@@ -93,7 +93,7 @@ class OblioApi {
         return response.data;
     }
 
-    async delete(type: string, seriesName: string, number: number): Promise<Map> {
+    async delete(type: string, seriesName: string, number: number, deleteCollect?: boolean, idempotencyKey?: string): Promise<Map> {
         this._checkType(type);
         let cif = this.getCif();
         let request = await this.buildRequest();
@@ -104,7 +104,9 @@ class OblioApi {
                 data: {
                     cif: cif,
                     seriesName: seriesName,
-                    number: number
+                    number: number,
+                    deleteCollect: deleteCollect,
+                    idempotencyKey: idempotencyKey
                 }
             });
         } catch (err) {
