@@ -133,7 +133,7 @@ class OblioApi {
         return response.data;
     }
 
-    async createEinvoice(seriesName: string, number: number): Promise<Map> {
+    async sendEinvoice(seriesName: string, number: number): Promise<Map> {
         let cif = this.getCif();
         let request = await this.buildRequest();
         let response;
