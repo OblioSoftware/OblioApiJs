@@ -135,6 +135,44 @@ class OblioApi {
         return response.data;
     }
 
+    async sendEinvoice(seriesName: string, number: number): Promise<Map> {
+        let cif = this.getCif();
+        let request = await this.buildRequest();
+        let response;
+
+        try {
+            response = await request.post('/api/docs/einvoice', {
+                cif: cif,
+                seriesName: seriesName,
+                number: number
+            });
+        } catch (err) {
+            response = err.response;
+        }
+        this._checkErrorResponse(response);
+        return response.data;
+    }
+
+    async getEinvoice(seriesName: string, number: number): Promise<Map | FileResponse> {
+        let cif = this.getCif();
+        let request = await this.buildRequest();
+        let response;
+
+        try {
+            response = await request.getRaw('/api/docs/einvoice', {
+                params: {
+                    cif: cif,
+                    seriesName: seriesName,
+                    number: number
+                }
+            });
+        } catch (err) {
+            response = err.response;
+        }
+        this._checkErrorResponse(response);
+        return response.data;
+    }
+
     async nomenclature(type: string, name: string = '', filters: Map = {}): Promise<Map> {
         let cif = '';
         switch (type) {
@@ -257,6 +295,11 @@ interface Map {
     [key: string]: any  
 }
 
+export interface FileResponse {
+    file: Buffer;
+    mimeType: string;
+}
+
 export class OblioApiException {
     message: string = '';
     code: number = 0;
@@ -352,6 +395,26 @@ class HttpClient {
             headers: this.headers
         });
         return this._result(response);
+    }
+
+    async getRaw(endpoint: string, data: Map): Promise<HttpResponse> {
+        let query = new URLSearchParams(('params' in data && data.params) || {});
+        let queryString = query.toString();
+        let response = await fetch(this.baseURL + endpoint + (queryString == '' ? '' : '?' + queryString), {
+            method: 'GET',
+            headers: this.headers
+        });
+        let contentType = response.headers.get('content-type') || '';
+        if (contentType.includes('application/json')) {
+            return this._result(response);
+        }
+        let result = new HttpResponse();
+        result.status = response.status;
+        result.data = {
+            file: Buffer.from(await response.arrayBuffer()),
+            mimeType: contentType.split(';').at(0)?.trim() || 'application/octet-stream'
+        };
+        return result;
     }
 
     async post(endpoint: string, data: Map): Promise<HttpResponse> {
